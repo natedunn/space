@@ -1,0 +1,271 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --bg: #f5ecdf;
+  --paper: rgba(255, 247, 240, 0.78);
+  --panel: rgba(255, 250, 245, 0.7);
+  --panel-strong: rgba(255, 253, 248, 0.9);
+  --header: rgba(245, 236, 223, 0.84);
+  --ink: #201511;
+  --muted: #69584f;
+  --line: rgba(32, 21, 17, 0.1);
+  --line-strong: rgba(32, 21, 17, 0.18);
+  --accent: #ff6a3d;
+  --accent-cool: #0d7c86;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  background:
+    radial-gradient(900px 480px at 0% 0%, rgba(255, 106, 61, 0.18), transparent 62%),
+    radial-gradient(720px 420px at 100% 0%, rgba(13, 124, 134, 0.14), transparent 60%),
+    linear-gradient(180deg, #fbf4eb 0%, #f7efe5 46%, #f5ecdf 100%);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.2;
+  background-image:
+    linear-gradient(rgba(32, 21, 17, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 21, 17, 0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: radial-gradient(circle at 50% 15%, black, transparent 78%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.4;
+  background:
+    radial-gradient(circle at 14% 16%, rgba(255, 255, 255, 0.9), transparent 22%),
+    radial-gradient(circle at 84% 18%, rgba(255, 106, 61, 0.16), transparent 20%),
+    radial-gradient(circle at 70% 72%, rgba(13, 124, 134, 0.16), transparent 24%);
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: rgba(255, 106, 61, 0.38);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+code {
+  font-size: 0.9em;
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--panel-strong) 84%, white 16%);
+  border-radius: 7px;
+  padding: 2px 7px;
+}
+
+pre code {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.page-wrap {
+  width: min(1180px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.display-title {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72) inset,
+    0 22px 60px rgba(84, 53, 39, 0.1),
+    0 6px 18px rgba(84, 53, 39, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.panel-grid,
+a,
+button {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.eyebrow {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--accent), #ffb347);
+  transition: transform 170ms ease;
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  color: var(--ink);
+}
+
+.nav-link:hover::after,
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+.fade-up {
+  animation: fade-up 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.auth-shell {
+  width: min(40rem, 100%);
+  margin-inline: auto;
+}
+
+.auth-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.auth-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.auth-field span {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.auth-field input {
+  width: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink);
+  padding: 0.95rem 1rem;
+  font: inherit;
+  outline: none;
+}
+
+.auth-field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 106, 61, 0.14);
+}
+
+.auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.auth-primary,
+.auth-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.85rem 1.15rem;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-primary {
+  border: 1px solid transparent;
+  background: var(--ink);
+  color: white;
+}
+
+.auth-primary:hover {
+  color: white;
+  background: var(--accent);
+}
+
+.auth-secondary {
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+}
+
+.auth-error {
+  margin: 0;
+  color: #a02222;
+  font-size: 0.95rem;
+}
+
+.auth-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.95rem;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
