@@ -9,6 +9,18 @@ npm install
 npm run dev
 ```
 
+To run the web app through Portless while keeping Convex dev running:
+
+```bash
+npm run dev:portless
+```
+
+That starts the app at `https://nate-space.localhost` by default. Portless also supports custom local TLDs, for example:
+
+```bash
+PORTLESS_TLD=test npm run dev:portless
+```
+
 # Building For Production
 
 To build this application for production:

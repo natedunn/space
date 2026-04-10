@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "concurrently -k -n web,convex -c blue,green \"npm run dev:web\" \"npm run convex:dev\"",
-    "dev:web": "vite dev --port 3000",
+    "dev:portless": "concurrently -k -n web,convex -c blue,green \"portless run --name nate-space npm run dev:web\" \"npm run convex:dev\"",
+    "dev:web": "vite dev",
     "convex:dev": "npx convex dev",
     "build": "vite build",
     "preview": "vite preview",
@@ -42,6 +43,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "concurrently": "^9.2.1",
     "jsdom": "^28.1.0",
+    "portless": "^0.10.1",
     "typescript": "^5.7.2",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^5.1.4",
