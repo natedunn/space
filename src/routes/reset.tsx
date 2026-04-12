@@ -2,6 +2,10 @@ import { useConvexMutation } from '@convex-dev/react-query'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
+import { Label } from '../components/ui/label'
+import { FieldRoot } from '../components/ui/field'
 
 const zenApi = ((api as unknown) as { zen: any }).zen
 
@@ -49,93 +53,88 @@ function ResetPage() {
   }
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <section className="auth-shell panel rounded-[2rem] p-6 sm:p-8">
-        <p className="eyebrow mb-3">Recovery</p>
-        <h1 className="display-title text-4xl leading-[0.96] sm:text-5xl">
-          Reset password
-        </h1>
-        <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-          Request a reset code, then set a new password.
-        </p>
+    <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+      <h1 className="text-2xl font-semibold text-foreground">Reset password</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {step === 'request'
+          ? 'Enter your email to receive a reset code.'
+          : step === 'reset'
+            ? 'Enter the code and your new password.'
+            : 'Your password has been reset.'}
+      </p>
 
-        {step === 'request' ? (
-          <form className="auth-form mt-8" onSubmit={(event) => void handleRequestReset(event)}>
-            <label className="auth-field">
-              <span>Email</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-              />
-            </label>
+      {step === 'request' ? (
+        <form className="mt-8 space-y-4" onSubmit={(event) => void handleRequestReset(event)}>
+          <FieldRoot>
+            <Label>Email</Label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </FieldRoot>
 
-            {error ? <p className="auth-error">{error}</p> : null}
+          {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-            <div className="auth-actions">
-              <button type="submit" className="auth-primary">
-                Send reset code
-              </button>
-            </div>
-          </form>
-        ) : null}
+          <Button type="submit" className="w-full">
+            Send reset code
+          </Button>
+        </form>
+      ) : null}
 
-        {step === 'reset' ? (
-          <form className="auth-form mt-8" onSubmit={(event) => void handleResetPassword(event)}>
-            <label className="auth-field">
-              <span>Email</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-              />
-            </label>
+      {step === 'reset' ? (
+        <form className="mt-8 space-y-4" onSubmit={(event) => void handleResetPassword(event)}>
+          <FieldRoot>
+            <Label>Email</Label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </FieldRoot>
 
-            <label className="auth-field">
-              <span>Reset code</span>
-              <input
-                type="text"
-                value={code}
-                onChange={(event) => setCode(event.target.value)}
-                placeholder="123456"
-                required
-              />
-            </label>
+          <FieldRoot>
+            <Label>Reset code</Label>
+            <Input
+              type="text"
+              value={code}
+              onChange={(event) => setCode(event.target.value)}
+              placeholder="123456"
+              required
+            />
+          </FieldRoot>
 
-            <label className="auth-field">
-              <span>New password</span>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(event) => setNewPassword(event.target.value)}
-                placeholder="At least 12 characters"
-                minLength={12}
-                required
-              />
-            </label>
+          <FieldRoot>
+            <Label>New password</Label>
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={(event) => setNewPassword(event.target.value)}
+              placeholder="At least 12 characters"
+              minLength={12}
+              required
+            />
+          </FieldRoot>
 
-            {error ? <p className="auth-error">{error}</p> : null}
+          {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-            <div className="auth-actions">
-              <button type="submit" className="auth-primary">
-                Set new password
-              </button>
-            </div>
-          </form>
-        ) : null}
+          <Button type="submit" className="w-full">
+            Set new password
+          </Button>
+        </form>
+      ) : null}
 
-        {step === 'done' ? (
-          <div className="auth-actions mt-8">
-            <Link className="auth-primary" to="/signin">
-              Return to sign in
-            </Link>
-          </div>
-        ) : null}
-      </section>
+      {step === 'done' ? (
+        <div className="mt-8">
+          <Button className="w-full" render={<Link to="/signin" />}>
+            Return to sign in
+          </Button>
+        </div>
+      ) : null}
     </main>
   )
 }

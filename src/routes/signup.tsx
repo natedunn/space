@@ -2,6 +2,10 @@ import { useConvexMutation } from '@convex-dev/react-query'
 import { Link, createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
+import { Label } from '../components/ui/label'
+import { FieldRoot } from '../components/ui/field'
 
 const zenApi = ((api as unknown) as { zen: any }).zen
 
@@ -49,119 +53,95 @@ function SignUpPage() {
 
   if (status === 'verify') {
     return (
-      <main className="page-wrap px-4 pb-16 pt-10">
-        <section className="auth-shell panel rounded-[2rem] p-6 sm:p-8">
-          <p className="eyebrow mb-3">Account created</p>
-          <h1 className="display-title text-4xl leading-[0.96] sm:text-5xl">
-            Check your email
-          </h1>
-          <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-            A verification code was sent to <strong>{email}</strong>. In local dev it also
-            appears in the Convex logs.
-          </p>
-          <div className="auth-actions mt-8">
-            <button
-              type="button"
-              className="auth-primary"
-              onClick={() => void navigate({ to: '/verify', search: { email } })}
-            >
-              Enter verification code
-            </button>
-            <button
-              type="button"
-              className="auth-secondary"
-              onClick={() => void navigate({ to: '/signin' })}
-            >
-              Go to sign in
-            </button>
-          </div>
-        </section>
+      <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+        <h1 className="text-2xl font-semibold text-foreground">Check your email</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          A verification code was sent to <strong>{email}</strong>.
+        </p>
+        <div className="mt-8 flex flex-col gap-2">
+          <Button onClick={() => void navigate({ to: '/verify', search: { email } })}>
+            Enter verification code
+          </Button>
+          <Button variant="secondary" onClick={() => void navigate({ to: '/signin' })}>
+            Go to sign in
+          </Button>
+        </div>
       </main>
     )
   }
 
   if (status === 'done') {
     return (
-      <main className="page-wrap px-4 pb-16 pt-10">
-        <section className="auth-shell panel rounded-[2rem] p-6 sm:p-8">
-          <p className="eyebrow mb-3">Account created</p>
-          <h1 className="display-title text-4xl leading-[0.96] sm:text-5xl">Ready to sign in</h1>
-          <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-            Your account is available now.
-          </p>
-          <div className="auth-actions mt-8">
-            <button
-              type="button"
-              className="auth-primary"
-              onClick={() => void navigate({ to: '/signin' })}
-            >
-              Go to sign in
-            </button>
-          </div>
-        </section>
+      <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+        <h1 className="text-2xl font-semibold text-foreground">Account created</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Your account is ready. Sign in to get started.
+        </p>
+        <div className="mt-8">
+          <Button className="w-full" onClick={() => void navigate({ to: '/signin' })}>
+            Go to sign in
+          </Button>
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <section className="auth-shell panel rounded-[2rem] p-6 sm:p-8">
-        <p className="eyebrow mb-3">Auth</p>
-        <h1 className="display-title text-4xl leading-[0.96] sm:text-5xl">Create account</h1>
-        <p className="mt-4 max-w-xl text-sm leading-6 text-[var(--muted)]">
-          Start with email and password, then move into the CMS.
-        </p>
+    <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+      <h1 className="text-2xl font-semibold text-foreground">Create account</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Sign up with email and password.
+      </p>
 
-        <form className="auth-form mt-8" onSubmit={(event) => void handleSubmit(event)}>
-          <label className="auth-field">
-            <span>Name</span>
-            <input
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Your name"
-              autoComplete="name"
-            />
-          </label>
+      <form className="mt-8 space-y-4" onSubmit={(event) => void handleSubmit(event)}>
+        <FieldRoot>
+          <Label>Name</Label>
+          <Input
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Your name"
+            autoComplete="name"
+          />
+        </FieldRoot>
 
-          <label className="auth-field">
-            <span>Email</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="you@example.com"
-              autoComplete="email"
-              required
-            />
-          </label>
+        <FieldRoot>
+          <Label>Email</Label>
+          <Input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+            required
+          />
+        </FieldRoot>
 
-          <label className="auth-field">
-            <span>Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="At least 12 characters"
-              autoComplete="new-password"
-              minLength={12}
-              required
-            />
-          </label>
+        <FieldRoot>
+          <Label>Password</Label>
+          <Input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="At least 12 characters"
+            autoComplete="new-password"
+            minLength={12}
+            required
+          />
+        </FieldRoot>
 
-          {error ? <p className="auth-error">{error}</p> : null}
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-          <div className="auth-actions">
-            <button type="submit" className="auth-primary" disabled={status === 'loading'}>
-              {status === 'loading' ? 'Creating...' : 'Create account'}
-            </button>
-          </div>
-        </form>
+        <Button type="submit" className="w-full" disabled={status === 'loading'}>
+          {status === 'loading' ? 'Creating...' : 'Create account'}
+        </Button>
+      </form>
 
-        <div className="auth-links mt-6">
-          <Link to="/signin">Already have an account?</Link>
-        </div>
-      </section>
+      <div className="mt-6 text-center text-sm">
+        <Link to="/signin" className="text-muted-foreground hover:text-foreground">
+          Already have an account?
+        </Link>
+      </div>
     </main>
   )
 }

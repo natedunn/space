@@ -2,6 +2,10 @@ import { useConvexMutation } from '@convex-dev/react-query'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
+import { Label } from '../components/ui/label'
+import { FieldRoot } from '../components/ui/field'
 
 const zenApi = ((api as unknown) as { zen: any }).zen
 
@@ -39,48 +43,47 @@ function VerifyPage() {
     }
   }
 
-  return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <section className="auth-shell panel rounded-[2rem] p-6 sm:p-8">
-        <p className="eyebrow mb-3">Verification</p>
-        <h1 className="display-title text-4xl leading-[0.96] sm:text-5xl">Verify email</h1>
-        <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-          Enter the code sent to <strong>{email || 'your inbox'}</strong>.
+  if (status === 'done') {
+    return (
+      <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+        <h1 className="text-2xl font-semibold text-foreground">Email verified</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          You can now sign in to your account.
         </p>
+        <div className="mt-8">
+          <Button className="w-full" onClick={() => void navigate({ to: '/signin' })}>
+            Continue to sign in
+          </Button>
+        </div>
+      </main>
+    )
+  }
 
-        {status === 'done' ? (
-          <div className="auth-actions mt-8">
-            <button
-              type="button"
-              className="auth-primary"
-              onClick={() => void navigate({ to: '/signin' })}
-            >
-              Continue to sign in
-            </button>
-          </div>
-        ) : (
-          <form className="auth-form mt-8" onSubmit={(event) => void handleSubmit(event)}>
-            <label className="auth-field">
-              <span>Verification code</span>
-              <input
-                type="text"
-                value={code}
-                onChange={(event) => setCode(event.target.value)}
-                placeholder="123456"
-                required
-              />
-            </label>
+  return (
+    <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+      <h1 className="text-2xl font-semibold text-foreground">Verify email</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Enter the code sent to <strong>{email || 'your inbox'}</strong>.
+      </p>
 
-            {error ? <p className="auth-error">{error}</p> : null}
+      <form className="mt-8 space-y-4" onSubmit={(event) => void handleSubmit(event)}>
+        <FieldRoot>
+          <Label>Verification code</Label>
+          <Input
+            type="text"
+            value={code}
+            onChange={(event) => setCode(event.target.value)}
+            placeholder="123456"
+            required
+          />
+        </FieldRoot>
 
-            <div className="auth-actions">
-              <button type="submit" className="auth-primary" disabled={status === 'loading'}>
-                {status === 'loading' ? 'Verifying...' : 'Verify email'}
-              </button>
-            </div>
-          </form>
-        )}
-      </section>
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+        <Button type="submit" className="w-full" disabled={status === 'loading'}>
+          {status === 'loading' ? 'Verifying...' : 'Verify email'}
+        </Button>
+      </form>
     </main>
   )
 }

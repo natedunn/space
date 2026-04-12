@@ -7,6 +7,10 @@ import {
 } from '@tanstack/react-router'
 import { useState } from 'react'
 import { authClient } from '../lib/auth-client'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
+import { Label } from '../components/ui/label'
+import { FieldRoot } from '../components/ui/field'
 
 export const Route = createFileRoute('/signin')({
   beforeLoad: ({ context }) => {
@@ -41,53 +45,52 @@ function SignInPage() {
   }
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <section className="auth-shell panel rounded-[2rem] p-6 sm:p-8">
-        <p className="eyebrow mb-3">Auth</p>
-        <h1 className="display-title text-4xl leading-[0.96] sm:text-5xl">Sign in</h1>
-        <p className="mt-4 max-w-xl text-sm leading-6 text-[var(--muted)]">
-          Use your email and password to enter the CMS.
-        </p>
+    <main className="mx-auto flex max-w-sm flex-col px-4 pt-24 pb-16">
+      <h1 className="text-2xl font-semibold text-foreground">Sign in</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Enter your credentials to access the CMS.
+      </p>
 
-        <form className="auth-form mt-8" onSubmit={(event) => void handleSubmit(event)}>
-          <label className="auth-field">
-            <span>Email</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="you@example.com"
-              autoComplete="email"
-              required
-            />
-          </label>
+      <form className="mt-8 space-y-4" onSubmit={(event) => void handleSubmit(event)}>
+        <FieldRoot>
+          <Label>Email</Label>
+          <Input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+            required
+          />
+        </FieldRoot>
 
-          <label className="auth-field">
-            <span>Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="Your password"
-              autoComplete="current-password"
-              required
-            />
-          </label>
+        <FieldRoot>
+          <Label>Password</Label>
+          <Input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="Your password"
+            autoComplete="current-password"
+            required
+          />
+        </FieldRoot>
 
-          {error ? <p className="auth-error">{error}</p> : null}
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-          <div className="auth-actions">
-            <button type="submit" className="auth-primary" disabled={status === 'loading'}>
-              {status === 'loading' ? 'Signing in...' : 'Sign in'}
-            </button>
-          </div>
-        </form>
+        <Button type="submit" className="w-full" disabled={status === 'loading'}>
+          {status === 'loading' ? 'Signing in...' : 'Sign in'}
+        </Button>
+      </form>
 
-        <div className="auth-links mt-6">
-          <Link to="/reset">Forgot password?</Link>
-          <Link to="/signup">Create account</Link>
-        </div>
-      </section>
+      <div className="mt-6 flex items-center justify-between text-sm">
+        <Link to="/reset" className="text-muted-foreground hover:text-foreground">
+          Forgot password?
+        </Link>
+        <Link to="/signup" className="text-muted-foreground hover:text-foreground">
+          Create account
+        </Link>
+      </div>
     </main>
   )
 }
