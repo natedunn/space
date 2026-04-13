@@ -1,62 +1,62 @@
 {
-  "name": "nate.space",
-  "private": true,
-  "type": "module",
-  "imports": {
-    "#/*": "./src/*"
-  },
-  "scripts": {
-    "dev": "concurrently -k -n web,convex -c blue,green \"npm run dev:web\" \"npm run convex:dev\"",
-    "dev:portless": "concurrently -k -n web,convex -c blue,green \"portless run --name nate-space npm run dev:web\" \"npm run convex:dev\"",
-    "dev:web": "vite dev",
-    "convex:dev": "npx convex dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "@base-ui/react": "^1.3.0",
-    "@convex-dev/react-query": "^0.1.0",
-    "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/react-devtools": "latest",
-    "@tanstack/react-query": "^5.96.2",
-    "@tanstack/react-router": "latest",
-    "@tanstack/react-router-devtools": "latest",
-    "@tanstack/react-router-ssr-query": "latest",
-    "@tanstack/react-start": "latest",
-    "@tanstack/router-plugin": "^1.132.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "convex": "^1.34.1",
-    "convex-zen": "^1.13.2",
-    "convex-zen-system-admin": "^1.14.1",
-    "lucide-react": "^0.545.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.1.18"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16",
-    "@tanstack/devtools-vite": "latest",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.0",
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
-    "@vitejs/plugin-react": "^5.1.4",
-    "concurrently": "^9.2.1",
-    "jsdom": "^28.1.0",
-    "portless": "^0.10.1",
-    "typescript": "^5.7.2",
-    "vite": "^7.3.1",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
-  }
+	"name": "nate.space",
+	"private": true,
+	"type": "module",
+	"imports": {
+		"#/*": "./src/*"
+	},
+	"scripts": {
+		"dev": "concurrently -k -n web,convex -c blue,green \"pnpm run dev:web\" \"pnpm run convex:dev\"",
+		"dev:portless": "concurrently -k -n web,convex -c blue,green \"portless run --name nate-space pnpm run dev:web\" \"pnpm run convex:dev\"",
+		"dev:web": "vite dev --host",
+		"convex:dev": "pnpm exec convex dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@base-ui/react": "^1.3.0",
+		"@convex-dev/react-query": "^0.1.0",
+		"@tailwindcss/vite": "^4.2.2",
+		"@tanstack/react-devtools": "latest",
+		"@tanstack/react-query": "^5.99.0",
+		"@tanstack/react-router": "latest",
+		"@tanstack/react-router-devtools": "latest",
+		"@tanstack/react-router-ssr-query": "latest",
+		"@tanstack/react-start": "latest",
+		"@tanstack/router-plugin": "^1.167.19",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"convex": "^1.35.1",
+		"convex-zen": "^1.13.4",
+		"convex-zen-system-admin": "^1.14.2",
+		"lucide-react": "^0.545.0",
+		"react": "^19.2.5",
+		"react-dom": "^19.2.5",
+		"tailwind-merge": "^3.5.0",
+		"tailwindcss": "^4.2.2"
+	},
+	"devDependencies": {
+		"@tailwindcss/typography": "^0.5.19",
+		"@tanstack/devtools-vite": "latest",
+		"@testing-library/dom": "^10.4.1",
+		"@testing-library/react": "^16.3.2",
+		"@types/node": "^22.19.17",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^5.2.0",
+		"concurrently": "^9.2.1",
+		"jsdom": "^28.1.0",
+		"portless": "^0.10.1",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.2",
+		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^3.2.4"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild",
+			"lightningcss"
+		]
+	}
 }
