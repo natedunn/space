@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Command } from "lucide-react";
+import { Command, X } from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
 import { useMenu, scrollToHash } from "../lib/menu";
 import { getItems } from "../lib/registry";
@@ -10,10 +10,10 @@ const EASE = "ease-[cubic-bezier(0.32,0.72,0,1)]";
 const DURATION = "duration-500";
 
 // ---------------------------------------------------------------------------
-// Hamburger / X button – fixed in the left gutter of the max-w-5xl container
+// Hamburger button — sticky, lives INSIDE the content flow
 // ---------------------------------------------------------------------------
 export function MenuButton() {
-	const { isOpen, toggle } = useMenu();
+	const { toggle } = useMenu();
 
 	// Cmd+\ (or Ctrl+\ on non-Mac) toggles the menu
 	useEffect(() => {
@@ -28,68 +28,25 @@ export function MenuButton() {
 	}, [toggle]);
 
 	return (
-		<div className="pointer-events-none fixed inset-x-0 top-0 z-50">
-			<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
-				<div className="xl:-ml-14">
-					<div className="flex items-center gap-3">
-						<button
-							type="button"
-							onClick={toggle}
-							aria-label={
-								isOpen ? "Close menu" : "Open menu"
-							}
-							aria-expanded={isOpen}
-							className="pointer-events-auto mt-24 flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1.5 rounded-lg bg-background/70 pl-2 backdrop-blur-sm transition-colors hover:bg-accent/80 md:mt-48"
-						>
-							<span
-								className={cn(
-									"h-[3px] w-6 rounded-full bg-foreground transition-all",
-									DURATION,
-									EASE,
-									isOpen && "translate-y-2 rotate-45",
-								)}
-							/>
-							<span
-								className={cn(
-									"h-[3px] w-4 rounded-full bg-foreground transition-all",
-									DURATION,
-									EASE,
-									isOpen && "w-6 -rotate-45",
-								)}
-							/>
-							<span
-								className={cn(
-									"h-[3px] w-2.5 rounded-full bg-foreground transition-all",
-									DURATION,
-									EASE,
-									isOpen && "scale-x-0 opacity-0",
-								)}
-							/>
-						</button>
-
-						{/* Shortcut hint */}
-						<span
-							className={cn(
-								"pointer-events-none mt-24 text-xs text-muted-foreground transition-all md:mt-48",
-								DURATION,
-								EASE,
-								isOpen
-									? "translate-x-0 opacity-60"
-									: "-translate-x-2 opacity-0",
-							)}
-						>
-							<kbd className="inline-flex items-center gap-1 rounded border border-foreground/30 bg-muted px-1.5 py-0.5 text-foreground"><Command className="h-2.5 w-2.5" /><span className="font-mono text-[10px]">\</span></kbd>
-							<span> to toggle</span>
-						</span>
-					</div>
-				</div>
+		<div className="pointer-events-none sticky top-4 z-[100] mx-auto w-full max-w-5xl px-4 xl:px-0">
+			<div className="xl:-ml-14">
+				<button
+					type="button"
+					onClick={toggle}
+					aria-label="Open menu"
+					className="pointer-events-auto flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1.5 rounded-lg bg-background/70 pl-2 backdrop-blur-sm transition-colors hover:bg-accent/80"
+				>
+					<span className="h-[3px] w-6 rounded-full bg-foreground" />
+					<span className="h-[3px] w-4 rounded-full bg-foreground" />
+					<span className="h-[3px] w-2.5 rounded-full bg-foreground" />
+				</button>
 			</div>
 		</div>
 	);
 }
 
 // ---------------------------------------------------------------------------
-// Slide-out panel + backdrop
+// Slide-out panel + backdrop + close button
 // ---------------------------------------------------------------------------
 const navItems = getItems("mainNav");
 const sectionLinks = getItems("sectionNav");
@@ -156,14 +113,49 @@ export function MenuPanel() {
 				aria-hidden="true"
 			/>
 
-			{/* ---- floating panel, pinned under the hamburger ---- */}
-			<div className="pointer-events-none fixed inset-x-0 top-0 z-40">
+			{/* ---- fixed panel with X close + nav ---- */}
+			<div className="pointer-events-none fixed inset-x-0 top-0 z-50">
 				<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
 					<div className="xl:-ml-14">
+						{/* X close button */}
+						<button
+							type="button"
+							onClick={close}
+							aria-label="Close menu"
+							className={cn(
+								"pointer-events-auto mt-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-all hover:bg-accent/80",
+								DURATION,
+								EASE,
+								isOpen
+									? "scale-100 opacity-100"
+									: "pointer-events-none scale-75 opacity-0",
+							)}
+						>
+							<X className="h-5 w-5 text-foreground" strokeWidth={2.5} />
+						</button>
+
+						{/* Shortcut hint */}
+						<span
+							className={cn(
+								"pointer-events-none mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-all",
+								DURATION,
+								EASE,
+								isOpen
+									? "translate-x-0 opacity-60"
+									: "-translate-x-2 opacity-0",
+							)}
+						>
+							<kbd className="inline-flex items-center gap-1 rounded border border-foreground/30 bg-muted px-1.5 py-0.5 text-foreground">
+								<Command className="h-2.5 w-2.5" />
+								<span className="font-mono text-[10px]">\</span>
+							</kbd>
+							<span>to toggle</span>
+						</span>
+
 						<nav
 							aria-label="Main navigation"
 							className={cn(
-								"pointer-events-auto mt-36 flex max-w-[10rem] flex-col gap-3 transition-all md:mt-60",
+								"pointer-events-auto mt-6 flex max-w-[10rem] flex-col gap-3 transition-all",
 								DURATION,
 								EASE,
 								isOpen
@@ -173,7 +165,6 @@ export function MenuPanel() {
 						>
 							{navItems.map((item) => {
 								const itemIdx = staggerIndex++;
-								// Sections nest under Home
 								const isHome = item.to === "/";
 								return (
 									<div
@@ -212,14 +203,10 @@ export function MenuPanel() {
 																staggerIndex++;
 															return (
 																<button
-																	key={
-																		section.id
-																	}
+																	key={section.id}
 																	type="button"
 																	onClick={() =>
-																		goToSection(
-																			section.hash!,
-																		)
+																		goToSection(section.hash!)
 																	}
 																	className={cn(
 																		"cursor-pointer text-left text-sm text-muted-foreground decoration-foreground/30 underline-offset-4 transition-all hover:text-foreground hover:underline",
@@ -230,15 +217,12 @@ export function MenuPanel() {
 																			: "-translate-x-2 opacity-0",
 																	)}
 																	style={{
-																		transitionDelay:
-																			isOpen
-																				? `${100 + secIdx * 60}ms`
-																				: "0ms",
+																		transitionDelay: isOpen
+																			? `${100 + secIdx * 60}ms`
+																			: "0ms",
 																	}}
 																>
-																	{
-																		section.label
-																	}
+																	{section.label}
 																</button>
 															);
 														},

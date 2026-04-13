@@ -101,10 +101,10 @@ function RootComponent() {
 				>
 					<ConvexProvider client={context.convex}>
 						<MenuProvider>
-							<MenuButton />
 							<MenuPanel />
 							<CommandPalette />
 							<MenuContentWrapper>
+								<MenuButton />
 								<Outlet />
 								<Footer />
 							</MenuContentWrapper>
