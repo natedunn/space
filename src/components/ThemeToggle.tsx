@@ -24,7 +24,7 @@ export function ThemeToggle() {
         <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
       </Menu.Trigger>
       <Menu.Portal>
-        <Menu.Positioner sideOffset={8} align="end">
+        <Menu.Positioner sideOffset={8} align="start" className="z-50">
           <Menu.Popup
             className={cn(
               "z-50 min-w-[8rem] overflow-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-md",

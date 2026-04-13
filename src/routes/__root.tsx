@@ -1,4 +1,6 @@
 import {
+	ErrorComponent,
+	type ErrorComponentProps,
 	HeadContent,
 	Outlet,
 	Scripts,
@@ -11,9 +13,15 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ConvexProvider } from "convex/react";
 import { ConvexZenAuthProvider } from "convex-zen/react";
 import type { ReactNode } from "react";
+import { CommandPalette } from "../components/CommandPalette";
 import Footer from "../components/Footer";
-// import Header from "../components/Header";
+import {
+	MenuButton,
+	MenuContentWrapper,
+	MenuPanel,
+} from "../components/SideMenu";
 import { authClient } from "../lib/auth-client";
+import { MenuProvider } from "../lib/menu";
 import { ThemeProvider } from "../lib/theme";
 import type { RouterContext } from "../router";
 import appCss from "../styles.css?url";
@@ -26,6 +34,24 @@ const getSessionServerFn = createServerFn({ method: "GET" }).handler(
 		return getSession();
 	},
 );
+
+function RootRouteErrorComponent({ error }: ErrorComponentProps) {
+	console.error("Root route error", error);
+
+	return (
+		<RootDocument>
+			<div className="mx-auto flex min-h-screen w-full max-w-3xl flex-1 flex-col justify-center gap-4 px-6 py-24">
+				<h1 className="text-2xl font-semibold">Something broke while rendering this page.</h1>
+				<p className="text-sm text-muted-foreground">
+					Check the browser console and dev server logs for the underlying exception.
+				</p>
+				<div className="rounded-lg border border-border/60 bg-card p-4">
+					<ErrorComponent error={error} />
+				</div>
+			</div>
+		</RootDocument>
+	);
+}
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	head: () => ({
@@ -43,6 +69,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 	}),
 	staleTime: 0,
 	preloadStaleTime: 0,
+	notFoundComponent: () => <div>Not found</div>,
+	errorComponent: RootRouteErrorComponent,
 	beforeLoad: async () => {
 		try {
 			const session = await getSessionServerFn();
@@ -50,7 +78,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				isAuthenticated: session !== null,
 				session,
 			};
-		} catch {
+		} catch (error) {
+			console.error("Failed to load session in root beforeLoad", error);
 			return {
 				isAuthenticated: false,
 				session: null,
@@ -71,11 +100,15 @@ function RootComponent() {
 					initialSession={context.session}
 				>
 					<ConvexProvider client={context.convex}>
-						<div className="flex min-h-screen flex-col">
-							{/* <Header /> */}
-							<Outlet />
-							<Footer />
-						</div>
+						<MenuProvider>
+							<MenuButton />
+							<MenuPanel />
+							<CommandPalette />
+							<MenuContentWrapper>
+								<Outlet />
+								<Footer />
+							</MenuContentWrapper>
+						</MenuProvider>
 					</ConvexProvider>
 				</ConvexZenAuthProvider>
 			</ThemeProvider>

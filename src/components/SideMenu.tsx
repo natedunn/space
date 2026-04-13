@@ -1,0 +1,300 @@
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Command } from "lucide-react";
+import { useEffect, useRef, type ReactNode } from "react";
+import { useMenu, scrollToHash } from "../lib/menu";
+import { getItems } from "../lib/registry";
+import { cn } from "../lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
+
+const EASE = "ease-[cubic-bezier(0.32,0.72,0,1)]";
+const DURATION = "duration-500";
+
+// ---------------------------------------------------------------------------
+// Hamburger / X button – fixed in the left gutter of the max-w-5xl container
+// ---------------------------------------------------------------------------
+export function MenuButton() {
+	const { isOpen, toggle } = useMenu();
+
+	// Cmd+\ (or Ctrl+\ on non-Mac) toggles the menu
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "\\" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				toggle();
+			}
+		};
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [toggle]);
+
+	return (
+		<div className="pointer-events-none fixed inset-x-0 top-0 z-50">
+			<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
+				<div className="xl:-ml-14">
+					<div className="flex items-center gap-3">
+						<button
+							type="button"
+							onClick={toggle}
+							aria-label={
+								isOpen ? "Close menu" : "Open menu"
+							}
+							aria-expanded={isOpen}
+							className="pointer-events-auto mt-24 flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1.5 rounded-lg bg-background/70 pl-2 backdrop-blur-sm transition-colors hover:bg-accent/80 md:mt-48"
+						>
+							<span
+								className={cn(
+									"h-[3px] w-6 rounded-full bg-foreground transition-all",
+									DURATION,
+									EASE,
+									isOpen && "translate-y-2 rotate-45",
+								)}
+							/>
+							<span
+								className={cn(
+									"h-[3px] w-4 rounded-full bg-foreground transition-all",
+									DURATION,
+									EASE,
+									isOpen && "w-6 -rotate-45",
+								)}
+							/>
+							<span
+								className={cn(
+									"h-[3px] w-2.5 rounded-full bg-foreground transition-all",
+									DURATION,
+									EASE,
+									isOpen && "scale-x-0 opacity-0",
+								)}
+							/>
+						</button>
+
+						{/* Shortcut hint */}
+						<span
+							className={cn(
+								"pointer-events-none mt-24 text-xs text-muted-foreground transition-all md:mt-48",
+								DURATION,
+								EASE,
+								isOpen
+									? "translate-x-0 opacity-60"
+									: "-translate-x-2 opacity-0",
+							)}
+						>
+							<kbd className="inline-flex items-center gap-1 rounded border border-foreground/30 bg-muted px-1.5 py-0.5 text-foreground"><Command className="h-2.5 w-2.5" /><span className="font-mono text-[10px]">\</span></kbd>
+							<span> to toggle</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// ---------------------------------------------------------------------------
+// Slide-out panel + backdrop
+// ---------------------------------------------------------------------------
+const navItems = getItems("mainNav");
+const sectionLinks = getItems("sectionNav");
+
+export function MenuPanel() {
+	const { isOpen, close } = useMenu();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const shelfRef = useRef<HTMLDivElement>(null);
+
+	// Kill transition during resize so the shelf width follows instantly
+	useEffect(() => {
+		let timer: ReturnType<typeof setTimeout>;
+		const onResize = () => {
+			shelfRef.current?.classList.add("!transition-none");
+			clearTimeout(timer);
+			timer = setTimeout(() => {
+				shelfRef.current?.classList.remove("!transition-none");
+			}, 150);
+		};
+		window.addEventListener("resize", onResize);
+		return () => {
+			window.removeEventListener("resize", onResize);
+			clearTimeout(timer);
+		};
+	}, []);
+
+	const goToSection = (hash: string) => {
+		close();
+		scrollToHash(hash, location.pathname, navigate);
+	};
+
+	// Build a flat stagger index across all items
+	let staggerIndex = 0;
+
+	return (
+		<>
+			{/* ---- backdrop with dither ---- */}
+			<div
+				className={cn(
+					"bg-halftone fixed inset-0 z-30 transition-opacity",
+					DURATION,
+					EASE,
+					isOpen ? "opacity-60" : "pointer-events-none opacity-0",
+				)}
+				onClick={close}
+				aria-hidden="true"
+			/>
+
+			{/* ---- left shelf — covers clip artifacts ---- */}
+			<div
+				ref={shelfRef}
+				className={cn(
+					"fixed inset-y-0 left-0 z-30 border-r transition-all",
+					DURATION,
+					EASE,
+					isOpen
+						? "translate-x-0 border-white/[0.06] bg-background shadow-[4px_0_24px_rgba(0,0,0,0.1)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.4)]"
+						: "pointer-events-none -translate-x-48 border-transparent bg-transparent shadow-none",
+				)}
+				style={{
+					width: "max(12rem, calc((100vw - 64rem) / 2 + 12rem))",
+				}}
+				aria-hidden="true"
+			/>
+
+			{/* ---- floating panel, pinned under the hamburger ---- */}
+			<div className="pointer-events-none fixed inset-x-0 top-0 z-40">
+				<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
+					<div className="xl:-ml-14">
+						<nav
+							aria-label="Main navigation"
+							className={cn(
+								"pointer-events-auto mt-36 flex max-w-[10rem] flex-col gap-3 transition-all md:mt-60",
+								DURATION,
+								EASE,
+								isOpen
+									? "translate-x-0 opacity-100"
+									: "-translate-x-3 opacity-0 pointer-events-none",
+							)}
+						>
+							{navItems.map((item) => {
+								const itemIdx = staggerIndex++;
+								// Sections nest under Home
+								const isHome = item.to === "/";
+								return (
+									<div
+										key={item.id}
+										className="flex flex-col gap-2"
+									>
+										<Link
+											to={item.to!}
+											onClick={close}
+											className={cn(
+												"text-2xl font-medium text-muted-foreground decoration-foreground/30 underline-offset-4 transition-all hover:text-foreground hover:underline",
+												DURATION,
+												EASE,
+												isOpen
+													? "translate-x-0 opacity-100"
+													: "-translate-x-2 opacity-0",
+											)}
+											style={{
+												transitionDelay: isOpen
+													? `${100 + itemIdx * 60}ms`
+													: "0ms",
+											}}
+											activeProps={{
+												className: "text-foreground",
+											}}
+										>
+											{item.label}
+										</Link>
+
+										{isHome &&
+											sectionLinks.length > 0 && (
+												<div className="flex flex-col gap-1.5 pl-3">
+													{sectionLinks.map(
+														(section) => {
+															const secIdx =
+																staggerIndex++;
+															return (
+																<button
+																	key={
+																		section.id
+																	}
+																	type="button"
+																	onClick={() =>
+																		goToSection(
+																			section.hash!,
+																		)
+																	}
+																	className={cn(
+																		"cursor-pointer text-left text-sm text-muted-foreground decoration-foreground/30 underline-offset-4 transition-all hover:text-foreground hover:underline",
+																		DURATION,
+																		EASE,
+																		isOpen
+																			? "translate-x-0 opacity-100"
+																			: "-translate-x-2 opacity-0",
+																	)}
+																	style={{
+																		transitionDelay:
+																			isOpen
+																				? `${100 + secIdx * 60}ms`
+																				: "0ms",
+																	}}
+																>
+																	{
+																		section.label
+																	}
+																</button>
+															);
+														},
+													)}
+												</div>
+											)}
+									</div>
+								);
+							})}
+
+							{/* theme toggle */}
+							<div
+								className={cn(
+									"relative z-50 pt-1 transition-all",
+									DURATION,
+									EASE,
+									isOpen
+										? "translate-x-0 opacity-100"
+										: "-translate-x-2 opacity-0",
+								)}
+								style={{
+									transitionDelay: isOpen
+										? `${100 + staggerIndex * 60}ms`
+										: "0ms",
+								}}
+							>
+								<ThemeToggle />
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+}
+
+// ---------------------------------------------------------------------------
+// Content wrapper – shifts right & dims when menu is open
+// ---------------------------------------------------------------------------
+export function MenuContentWrapper({ children }: { children: ReactNode }) {
+	const { isOpen, commandOpen } = useMenu();
+
+	return (
+		<div
+			className={cn(
+				"relative flex min-h-screen flex-col transition-all",
+				DURATION,
+				EASE,
+				isOpen
+					? "translate-x-48 scale-[0.98] opacity-50 grayscale"
+					: commandOpen
+						? "grayscale"
+						: "translate-x-0 scale-100 opacity-100 grayscale-0",
+			)}
+		>
+			{children}
+		</div>
+	);
+}
