@@ -28,7 +28,7 @@ export function MenuButton() {
 	}, [toggle]);
 
 	return (
-		<div className="pointer-events-none sticky top-4 z-[100] mx-auto w-full max-w-5xl px-4 xl:px-0">
+		<div className="pointer-events-none sticky top-4 z-[100] mx-auto w-full max-w-5xl px-4 pt-4 xl:px-0">
 			<div className="xl:-ml-14">
 				<button
 					type="button"
@@ -114,7 +114,7 @@ export function MenuPanel() {
 			/>
 
 			{/* ---- fixed panel with X close + nav ---- */}
-			<div className="pointer-events-none fixed inset-x-0 top-0 z-50">
+			<div className="pointer-events-none fixed inset-x-0 top-4 z-50">
 				<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
 					<div className="xl:-ml-14">
 						{/* X close button */}
