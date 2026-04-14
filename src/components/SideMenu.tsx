@@ -28,17 +28,17 @@ export function MenuButton() {
 	}, [toggle]);
 
 	return (
-		<div className="pointer-events-none sticky top-4 z-[100] mx-auto w-full max-w-5xl px-4 pt-4 xl:px-0">
+		<div className="pointer-events-none sticky top-4 z-[100] mx-auto w-full max-w-5xl px-4 xl:px-0">
 			<div className="xl:-ml-14">
 				<button
 					type="button"
 					onClick={toggle}
 					aria-label="Open menu"
-					className="pointer-events-auto flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1.5 rounded-lg bg-background/70 pl-2 backdrop-blur-sm transition-colors hover:bg-accent/80"
+					className="pointer-events-auto flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1 rounded-lg bg-background/70 pl-2.5 backdrop-blur-sm transition-colors hover:bg-accent/80"
 				>
-					<span className="h-[3px] w-6 rounded-full bg-foreground" />
-					<span className="h-[3px] w-4 rounded-full bg-foreground" />
-					<span className="h-[3px] w-2.5 rounded-full bg-foreground" />
+					<span className="h-[2px] w-5 rounded-full bg-foreground" />
+					<span className="h-[2px] w-3.5 rounded-full bg-foreground" />
+					<span className="h-[2px] w-2 rounded-full bg-foreground" />
 				</button>
 			</div>
 		</div>
@@ -114,7 +114,7 @@ export function MenuPanel() {
 			/>
 
 			{/* ---- fixed panel with X close + nav ---- */}
-			<div className="pointer-events-none fixed inset-x-0 top-4 z-50">
+			<div className="pointer-events-none fixed inset-x-0 top-0 z-50">
 				<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
 					<div className="xl:-ml-14">
 						{/* X close button */}
