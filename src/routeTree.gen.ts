@@ -13,8 +13,10 @@ import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as ResetRouteImport } from './routes/reset'
-import { Route as CmsRouteImport } from './routes/cms'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as CmsRouteRouteImport } from './routes/cms/route'
+import { Route as DefaultRouteRouteImport } from './routes/_default/route'
+import { Route as CmsIndexRouteImport } from './routes/cms/index'
+import { Route as DefaultIndexRouteImport } from './routes/_default/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const VerifyRoute = VerifyRouteImport.update({
@@ -37,15 +39,24 @@ const ResetRoute = ResetRouteImport.update({
   path: '/reset',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CmsRoute = CmsRouteImport.update({
+const CmsRouteRoute = CmsRouteRouteImport.update({
   id: '/cms',
   path: '/cms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const DefaultRouteRoute = DefaultRouteRouteImport.update({
+  id: '/_default',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsIndexRoute = CmsIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => CmsRouteRoute,
+} as any)
+const DefaultIndexRoute = DefaultIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DefaultRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -54,31 +65,34 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/cms': typeof CmsRoute
+  '/': typeof DefaultIndexRoute
+  '/cms': typeof CmsRouteRouteWithChildren
   '/reset': typeof ResetRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
+  '/cms/': typeof CmsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/cms': typeof CmsRoute
   '/reset': typeof ResetRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
+  '/': typeof DefaultIndexRoute
+  '/cms': typeof CmsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/cms': typeof CmsRoute
+  '/_default': typeof DefaultRouteRouteWithChildren
+  '/cms': typeof CmsRouteRouteWithChildren
   '/reset': typeof ResetRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/verify': typeof VerifyRoute
+  '/_default/': typeof DefaultIndexRoute
+  '/cms/': typeof CmsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -90,30 +104,33 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/verify'
+    | '/cms/'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/cms'
     | '/reset'
     | '/signin'
     | '/signup'
     | '/verify'
+    | '/'
+    | '/cms'
     | '/api/auth/$'
   id:
     | '__root__'
-    | '/'
+    | '/_default'
     | '/cms'
     | '/reset'
     | '/signin'
     | '/signup'
     | '/verify'
+    | '/_default/'
+    | '/cms/'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CmsRoute: typeof CmsRoute
+  DefaultRouteRoute: typeof DefaultRouteRouteWithChildren
+  CmsRouteRoute: typeof CmsRouteRouteWithChildren
   ResetRoute: typeof ResetRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
@@ -155,15 +172,29 @@ declare module '@tanstack/react-router' {
       id: '/cms'
       path: '/cms'
       fullPath: '/cms'
-      preLoaderRoute: typeof CmsRouteImport
+      preLoaderRoute: typeof CmsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_default': {
+      id: '/_default'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DefaultRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cms/': {
+      id: '/cms/'
+      path: '/'
+      fullPath: '/cms/'
+      preLoaderRoute: typeof CmsIndexRouteImport
+      parentRoute: typeof CmsRouteRoute
+    }
+    '/_default/': {
+      id: '/_default/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof DefaultIndexRouteImport
+      parentRoute: typeof DefaultRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -175,9 +206,33 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DefaultRouteRouteChildren {
+  DefaultIndexRoute: typeof DefaultIndexRoute
+}
+
+const DefaultRouteRouteChildren: DefaultRouteRouteChildren = {
+  DefaultIndexRoute: DefaultIndexRoute,
+}
+
+const DefaultRouteRouteWithChildren = DefaultRouteRoute._addFileChildren(
+  DefaultRouteRouteChildren,
+)
+
+interface CmsRouteRouteChildren {
+  CmsIndexRoute: typeof CmsIndexRoute
+}
+
+const CmsRouteRouteChildren: CmsRouteRouteChildren = {
+  CmsIndexRoute: CmsIndexRoute,
+}
+
+const CmsRouteRouteWithChildren = CmsRouteRoute._addFileChildren(
+  CmsRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CmsRoute: CmsRoute,
+  DefaultRouteRoute: DefaultRouteRouteWithChildren,
+  CmsRouteRoute: CmsRouteRouteWithChildren,
   ResetRoute: ResetRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
