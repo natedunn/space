@@ -1,4 +1,12 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { CommandPalette } from "../../components/CommandPalette";
+import Footer from "../../components/Footer";
+import {
+	MenuButton,
+	MenuContentWrapper,
+	MenuPanel,
+} from "../../components/SideMenu";
+import { MenuProvider } from "../../lib/menu";
 
 export const Route = createFileRoute("/_default")({
 	component: RouteComponent,
@@ -6,8 +14,14 @@ export const Route = createFileRoute("/_default")({
 
 function RouteComponent() {
 	return (
-		<div>
-			<Outlet />
-		</div>
+		<MenuProvider>
+			<MenuPanel />
+			<CommandPalette />
+			<MenuContentWrapper>
+				<MenuButton />
+				<Outlet />
+				<Footer />
+			</MenuContentWrapper>
+		</MenuProvider>
 	);
 }

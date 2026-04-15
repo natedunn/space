@@ -13,15 +13,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ConvexProvider } from "convex/react";
 import { ConvexZenAuthProvider } from "convex-zen/react";
 import type { ReactNode } from "react";
-import { CommandPalette } from "../components/CommandPalette";
-import Footer from "../components/Footer";
-import {
-	MenuButton,
-	MenuContentWrapper,
-	MenuPanel,
-} from "../components/SideMenu";
 import { authClient } from "../lib/auth-client";
-import { MenuProvider } from "../lib/menu";
 import { ThemeProvider } from "../lib/theme";
 import type { RouterContext } from "../router";
 import appCss from "../styles.css?url";
@@ -100,15 +92,7 @@ function RootComponent() {
 					initialSession={context.session}
 				>
 					<ConvexProvider client={context.convex}>
-						<MenuProvider>
-							<MenuPanel />
-							<CommandPalette />
-							<MenuContentWrapper>
-								<MenuButton />
-								<Outlet />
-								<Footer />
-							</MenuContentWrapper>
-						</MenuProvider>
+						<Outlet />
 					</ConvexProvider>
 				</ConvexZenAuthProvider>
 			</ThemeProvider>
