@@ -272,7 +272,7 @@ export function MenuContentWrapper({ children }: { children: ReactNode }) {
 				DURATION,
 				EASE,
 				isOpen
-					? "translate-x-48 scale-[0.98] opacity-50 grayscale"
+					? "translate-x-48 opacity-50 grayscale"
 					: commandOpen
 						? "grayscale"
 						: "translate-x-0 scale-100 opacity-100 grayscale-0",
