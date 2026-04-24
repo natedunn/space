@@ -27,7 +27,7 @@
 		"@tanstack/router-plugin": "^1.167.19",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
-		"convex": "^1.35.1",
+		"convex": "^1.36.1",
 		"convex-zen": "^1.13.4",
 		"convex-zen-system-admin": "^1.14.2",
 		"lucide-react": "^0.545.0",
