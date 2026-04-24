@@ -17,6 +17,7 @@ import { Route as CmsRouteRouteImport } from './routes/cms/route'
 import { Route as DefaultRouteRouteImport } from './routes/_default/route'
 import { Route as CmsIndexRouteImport } from './routes/cms/index'
 import { Route as DefaultIndexRouteImport } from './routes/_default/index'
+import { Route as CmsBookIndexRouteImport } from './routes/cms/book/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const VerifyRoute = VerifyRouteImport.update({
@@ -58,6 +59,11 @@ const DefaultIndexRoute = DefaultIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DefaultRouteRoute,
 } as any)
+const CmsBookIndexRoute = CmsBookIndexRouteImport.update({
+  id: '/book/',
+  path: '/book/',
+  getParentRoute: () => CmsRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/verify': typeof VerifyRoute
   '/cms/': typeof CmsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/cms/book/': typeof CmsBookIndexRoute
 }
 export interface FileRoutesByTo {
   '/reset': typeof ResetRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/': typeof DefaultIndexRoute
   '/cms': typeof CmsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/cms/book': typeof CmsBookIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_default/': typeof DefaultIndexRoute
   '/cms/': typeof CmsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/cms/book/': typeof CmsBookIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/verify'
     | '/cms/'
     | '/api/auth/$'
+    | '/cms/book/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/reset'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cms'
     | '/api/auth/$'
+    | '/cms/book'
   id:
     | '__root__'
     | '/_default'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/_default/'
     | '/cms/'
     | '/api/auth/$'
+    | '/cms/book/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,6 +208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DefaultIndexRouteImport
       parentRoute: typeof DefaultRouteRoute
     }
+    '/cms/book/': {
+      id: '/cms/book/'
+      path: '/book'
+      fullPath: '/cms/book/'
+      preLoaderRoute: typeof CmsBookIndexRouteImport
+      parentRoute: typeof CmsRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -220,10 +239,12 @@ const DefaultRouteRouteWithChildren = DefaultRouteRoute._addFileChildren(
 
 interface CmsRouteRouteChildren {
   CmsIndexRoute: typeof CmsIndexRoute
+  CmsBookIndexRoute: typeof CmsBookIndexRoute
 }
 
 const CmsRouteRouteChildren: CmsRouteRouteChildren = {
   CmsIndexRoute: CmsIndexRoute,
+  CmsBookIndexRoute: CmsBookIndexRoute,
 }
 
 const CmsRouteRouteWithChildren = CmsRouteRoute._addFileChildren(

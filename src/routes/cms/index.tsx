@@ -1,11 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/cms/")({
-	beforeLoad: ({ context }) => {
-		if (!context.isAuthenticated) {
-			throw redirect({ to: "/signin" });
-		}
-	},
 	component: CmsPage,
 });
 

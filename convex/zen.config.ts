@@ -13,7 +13,7 @@ export default defineConvexZen({
 	},
 	plugins: [
 		systemAdminPlugin({
-			defaultRole: "admin",
+			defaultRole: "user",
 			adminRole: "admin",
 		}),
 	],
