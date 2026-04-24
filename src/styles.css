@@ -209,3 +209,40 @@ a:hover {
 		radial-gradient(circle at center, #00000060 0.05rem, transparent 0),
 		radial-gradient(circle at center, #ffffff28 0.05rem, transparent 0);
 }
+
+@keyframes hero-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.hero-fade-word {
+	opacity: 0;
+	animation: hero-fade-in 520ms ease-out forwards;
+}
+
+.hero-fade-copy {
+	opacity: 0;
+	animation: hero-fade-in 640ms ease-out forwards;
+}
+
+.hero-parallax {
+	will-change: transform;
+	transition: transform 120ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hero-fade-word,
+	.hero-fade-copy {
+		opacity: 1;
+		animation: none;
+	}
+
+	.hero-parallax {
+		transform: none !important;
+		transition: none;
+	}
+}

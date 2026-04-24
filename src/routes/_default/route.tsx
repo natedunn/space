@@ -17,8 +17,8 @@ function RouteComponent() {
 		<MenuProvider>
 			<MenuPanel />
 			<CommandPalette />
+			<MenuButton />
 			<MenuContentWrapper>
-				<MenuButton />
 				<Outlet />
 				<Footer />
 			</MenuContentWrapper>

@@ -10,10 +10,10 @@ const EASE = "ease-[cubic-bezier(0.32,0.72,0,1)]";
 const DURATION = "duration-500";
 
 // ---------------------------------------------------------------------------
-// Hamburger button — sticky, lives INSIDE the content flow
+// Hamburger button — fixed so it doesn't participate in page layout
 // ---------------------------------------------------------------------------
 export function MenuButton() {
-	const { toggle } = useMenu();
+	const { isOpen, toggle } = useMenu();
 
 	// Cmd+\ (or Ctrl+\ on non-Mac) toggles the menu
 	useEffect(() => {
@@ -28,18 +28,29 @@ export function MenuButton() {
 	}, [toggle]);
 
 	return (
-		<div className="pointer-events-none sticky top-4 z-[100] mx-auto w-full max-w-5xl px-4 xl:px-0">
-			<div className="xl:-ml-14">
-				<button
-					type="button"
-					onClick={toggle}
-					aria-label="Open menu"
-					className="pointer-events-auto flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1 rounded-lg bg-background/70 pl-2.5 backdrop-blur-sm transition-colors hover:bg-accent/80"
-				>
-					<span className="h-[2px] w-5 rounded-full bg-foreground" />
-					<span className="h-[2px] w-3.5 rounded-full bg-foreground" />
-					<span className="h-[2px] w-2 rounded-full bg-foreground" />
-				</button>
+		<div
+			className={cn(
+				"pointer-events-none fixed inset-x-0 top-0 z-100 transition-opacity duration-300",
+				isOpen ? "opacity-0" : "opacity-100",
+			)}
+			aria-hidden={isOpen}
+		>
+			<div className="mx-auto w-full max-w-5xl px-4 xl:px-0">
+				<div className="xl:-ml-14">
+					<button
+						type="button"
+						onClick={toggle}
+						aria-label="Open menu"
+						className={cn(
+							"mt-4 flex h-10 w-10 cursor-pointer flex-col items-start justify-center gap-1 rounded-lg bg-background/70 pl-2.5 backdrop-blur-sm transition-colors hover:bg-accent/80",
+							isOpen ? "pointer-events-none" : "pointer-events-auto",
+						)}
+					>
+						<span className="h-0.5 w-5 rounded-full bg-foreground" />
+						<span className="h-0.5 w-3.5 rounded-full bg-foreground" />
+						<span className="h-0.5 w-2 rounded-full bg-foreground" />
+					</button>
+				</div>
 			</div>
 		</div>
 	);
@@ -167,10 +178,7 @@ export function MenuPanel() {
 								const itemIdx = staggerIndex++;
 								const isHome = item.to === "/";
 								return (
-									<div
-										key={item.id}
-										className="flex flex-col gap-2"
-									>
+									<div key={item.id} className="flex flex-col gap-2">
 										<Link
 											to={item.to!}
 											onClick={close}
@@ -194,41 +202,35 @@ export function MenuPanel() {
 											{item.label}
 										</Link>
 
-										{isHome &&
-											sectionLinks.length > 0 && (
-												<div className="flex flex-col gap-1.5 pl-3">
-													{sectionLinks.map(
-														(section) => {
-															const secIdx =
-																staggerIndex++;
-															return (
-																<button
-																	key={section.id}
-																	type="button"
-																	onClick={() =>
-																		goToSection(section.hash!)
-																	}
-																	className={cn(
-																		"cursor-pointer text-left text-sm text-muted-foreground decoration-foreground/30 underline-offset-4 transition-all hover:text-foreground hover:underline",
-																		DURATION,
-																		EASE,
-																		isOpen
-																			? "translate-x-0 opacity-100"
-																			: "-translate-x-2 opacity-0",
-																	)}
-																	style={{
-																		transitionDelay: isOpen
-																			? `${100 + secIdx * 60}ms`
-																			: "0ms",
-																	}}
-																>
-																	{section.label}
-																</button>
-															);
-														},
-													)}
-												</div>
-											)}
+										{isHome && sectionLinks.length > 0 && (
+											<div className="flex flex-col gap-1.5 pl-3">
+												{sectionLinks.map((section) => {
+													const secIdx = staggerIndex++;
+													return (
+														<button
+															key={section.id}
+															type="button"
+															onClick={() => goToSection(section.hash!)}
+															className={cn(
+																"cursor-pointer text-left text-sm text-muted-foreground decoration-foreground/30 underline-offset-4 transition-all hover:text-foreground hover:underline",
+																DURATION,
+																EASE,
+																isOpen
+																	? "translate-x-0 opacity-100"
+																	: "-translate-x-2 opacity-0",
+															)}
+															style={{
+																transitionDelay: isOpen
+																	? `${100 + secIdx * 60}ms`
+																	: "0ms",
+															}}
+														>
+															{section.label}
+														</button>
+													);
+												})}
+											</div>
+										)}
 									</div>
 								);
 							})}

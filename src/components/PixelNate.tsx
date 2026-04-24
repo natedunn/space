@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { cn } from "../lib/utils";
 
 const WATERMARK_PATHS = [
@@ -44,40 +45,45 @@ const WATERMARK_PATHS = [
 // Deterministic shuffle based on index for consistent SSR/client rendering
 const DELAYS = WATERMARK_PATHS.map((_, i) => ((i * 7 + 13) % WATERMARK_PATHS.length) * 40);
 
-export function TildeWatermark({ className }: { className?: string }) {
-	return (
-		<svg
-			className={cn("pointer-events-none", className)}
-			viewBox="0 0 675 300"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			aria-hidden="true"
-		>
-			<style>{`
-				@keyframes fade-in {
-					from { opacity: 0; }
-					to { opacity: 1; }
-				}
-			`}</style>
-			{WATERMARK_PATHS.map((p, i) => (
-				<path
-					key={i}
-					d={p.d}
-					fill="currentColor"
-					{...(p.rule ? { fillRule: "evenodd", clipRule: "evenodd" } : {})}
-					style={
-						i === 0
-							? { animation: "fade-in 0.8s ease-out both" }
-							: {
-									opacity: 0,
-									animation: `fade-in 0.01s steps(1) ${DELAYS[i]}ms forwards`,
-								}
+export const TildeWatermark = forwardRef<SVGSVGElement, { className?: string }>(
+	function TildeWatermark({ className }, ref) {
+		return (
+			<svg
+				ref={ref}
+				className={cn("pointer-events-none", className)}
+				viewBox="0 0 675 300"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				aria-hidden="true"
+			>
+				<style>{`
+					@keyframes fade-in {
+						from { opacity: 0; }
+						to { opacity: 1; }
 					}
-				/>
-			))}
-		</svg>
-	);
-}
+				`}</style>
+				{WATERMARK_PATHS.map((p, i) => (
+					<path
+						key={i}
+						d={p.d}
+						fill="currentColor"
+						{...(p.rule ? { fillRule: "evenodd", clipRule: "evenodd" } : {})}
+						style={
+							i === 0
+								? { animation: "fade-in 0.8s ease-out both" }
+								: {
+										opacity: 0,
+										animation: `fade-in 0.01s steps(1) ${DELAYS[i]}ms forwards`,
+									}
+						}
+					/>
+				))}
+			</svg>
+		);
+	},
+);
+
+TildeWatermark.displayName = "TildeWatermark";
 
 export function Tilde({ className }: { className?: string }) {
 	return (
