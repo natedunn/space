@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import { devtools } from "@tanstack/devtools-vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 
@@ -17,6 +16,9 @@ function getDevPort() {
 const devHost = process.env.HOST?.trim();
 
 const config = defineConfig({
+	resolve: {
+		tsconfigPaths: true,
+	},
 	server: {
 		host: devHost || undefined,
 		port: getDevPort(),
@@ -24,7 +26,6 @@ const config = defineConfig({
 	},
 	plugins: [
 		devtools(),
-		tsconfigPaths({ projects: ["./tsconfig.json"] }),
 		tailwindcss(),
 		tanstackStart(),
 		viteReact(),

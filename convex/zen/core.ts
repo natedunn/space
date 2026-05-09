@@ -3,6 +3,7 @@ import { v } from "convex/values";
 import { mutation, query } from "../_generated/server";
 import { auth } from "./_generated/auth";
 
+
 export const signUp = mutation({
   args: {
     email: v.string(),
@@ -15,7 +16,7 @@ export const signUp = mutation({
   },
 });
 
-export const signInWithEmail = mutation({
+export const signInWithCredential = mutation({
   args: {
     email: v.string(),
     password: v.string(),
@@ -67,15 +68,6 @@ export const invalidateSession = mutation({
   },
 });
 
-export const invalidateAllSessions = mutation({
-  args: {
-    userId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    await auth.signOutAll(ctx, args.userId);
-  },
-});
-
 export const validateSession = mutation({
   args: {
     token: v.string(),
@@ -94,11 +86,13 @@ export const currentUser = query({
   },
 });
 
-export const getUserById = query({
+export const updateProfile = mutation({
   args: {
-    userId: v.string(),
+    token: v.optional(v.string()),
+    name: v.optional(v.string()),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    return auth.getAuthUserById(ctx, args.userId);
+    return auth.updateProfile(ctx, args);
   },
 });

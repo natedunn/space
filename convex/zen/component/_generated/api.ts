@@ -9,8 +9,9 @@
  */
 
 import type * as _runtime from "../_runtime.js";
-import type * as gateway from "../gateway.js";
-import type * as systemAdmin_gateway from "../systemAdmin/gateway.js";
+import type * as core_gateway from "../core/gateway.js";
+import type * as core_users from "../core/users.js";
+import type * as plugins_systemAdmin_gateway from "../plugins/systemAdmin/gateway.js";
 
 import type {
   ApiFromModules,
@@ -21,8 +22,9 @@ import { anyApi, componentsGeneric } from "convex/server";
 
 const fullApi: ApiFromModules<{
   _runtime: typeof _runtime;
-  gateway: typeof gateway;
-  "systemAdmin/gateway": typeof systemAdmin_gateway;
+  "core/gateway": typeof core_gateway;
+  "core/users": typeof core_users;
+  "plugins/systemAdmin/gateway": typeof plugins_systemAdmin_gateway;
 }> = anyApi as any;
 
 /**
@@ -51,7 +53,4 @@ export const internal: FilterApi<
   FunctionReference<any, "internal">
 > = anyApi as any;
 
-export const components = componentsGeneric() as unknown as {
-  core: import("convex-zen/core/_generated/component.js").ComponentApi<"core">;
-  systemAdminComponent: import("convex-zen-system-admin/_generated/component.js").ComponentApi<"systemAdminComponent">;
-};
+export const components = componentsGeneric() as unknown as {};
