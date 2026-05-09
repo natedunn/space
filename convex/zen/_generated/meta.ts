@@ -2,19 +2,20 @@
 export const authMeta = {
   "core": {
     "currentUser": "query",
-    "getUserById": "query",
-    "invalidateAllSessions": "mutation",
     "invalidateSession": "mutation",
     "requestPasswordReset": "mutation",
     "resetPassword": "mutation",
-    "signInWithEmail": "mutation",
+    "signInWithCredential": "mutation",
     "signUp": "mutation",
+    "updateProfile": "mutation",
     "validateSession": "mutation",
     "verifyEmail": "mutation"
   },
   "plugin": {
     "systemAdmin": {
       "banUser": "mutation",
+      "bootstrapAdmin": "mutation",
+      "canBootstrapAdmin": "query",
       "deleteUser": "mutation",
       "isAdmin": "query",
       "listUsers": "query",
