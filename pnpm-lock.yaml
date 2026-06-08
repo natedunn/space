@@ -51,8 +51,8 @@ importers:
         specifier: ^1.38.0
         version: 1.38.0(react@19.2.6)
       convex-zen:
-        specifier: 1.20.0
-        version: 1.20.0(@tanstack/react-start@1.167.65(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.11(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)))(convex@1.38.0(react@19.2.6))(react@19.2.6)
+        specifier: 1.13.5
+        version: 1.13.5(@tanstack/react-start@1.167.65(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.11(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)))(convex@1.38.0(react@19.2.6))(react@19.2.6)
       lucide-react:
         specifier: ^1.14.0
         version: 1.14.0(react@19.2.6)
@@ -1344,12 +1344,12 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  convex-zen@1.20.0:
-    resolution: {integrity: sha512-TNEQRyUjj0zBn3osDXQOWbAcl6Umt1+K0ZW5u88kucEHjxfCRjaM/7gfa7sBZymyBnAZn+asn4TkZ1J1XvAahQ==}
+  convex-zen@1.13.5:
+    resolution: {integrity: sha512-lqocMcENhwFTvmvUcHgGvv8LWmeCSx2sf5Wm5QIS5IVrj5ZDmyBP9vHTa0HNAZ7RZgdyA/xvNKmJuUHO1zKuCQ==}
     hasBin: true
     peerDependencies:
       '@tanstack/react-start': ^1.162.1
-      convex: ^1.36.0
+      convex: ^1.35.1
       next: '>=15 <16'
       react: '>=18.0.0 || >=19.0.0'
     peerDependenciesMeta:
@@ -3335,7 +3335,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-zen@1.20.0(@tanstack/react-start@1.167.65(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.11(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)))(convex@1.38.0(react@19.2.6))(react@19.2.6):
+  convex-zen@1.13.5(@tanstack/react-start@1.167.65(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.11(@types/node@25.6.2)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)))(convex@1.38.0(react@19.2.6))(react@19.2.6):
     dependencies:
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0

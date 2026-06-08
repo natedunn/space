@@ -1,4 +1,9 @@
-Welcome to your new TanStack Start app! 
+# Monoceros
+
+> Under development: this project is actively being built and the setup,
+> features, and documentation may change frequently.
+
+Welcome to your new TanStack Start app!
 
 # Getting Started
 
